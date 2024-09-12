@@ -7,8 +7,6 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useToast } from "@/hooks/use-toast";
 import Home from "../home/home";
-import { House, Pause, Phone, PhoneOff } from "lucide-react";
-import PauseIcon from '@public/svg/pause.svg';
 
 const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 const VAPI_PRIVATE_KEY = process.env.NEXT_PUBLIC_VAPI_PRIVATE_KEY;
