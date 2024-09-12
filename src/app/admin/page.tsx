@@ -11,20 +11,34 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from '@/hooks/use-toast';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PRIVATE_KEY;
+
+// Define Zod schema for form validation
+const formSchema = z.object({
+    firstMessage: z.string().min(1, "First message is required"),
+    uploadTitle: z.string().min(1, "Title is required"),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 const AdminPage = () => {
     const { toast } = useToast();
     const [fileName, setFileName] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [fileTitle, setFileTitle] = useState('');
-    const [uploadTitle, setUploadTitle] = useState('');
     const [fileList, setFileList] = useState([]);
     const [dragging, setDragging] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+    });
 
     const handleFileUpload = (files: FileList | null) => {
         if (files && files.length > 0) {
@@ -72,29 +86,29 @@ const AdminPage = () => {
         }
     };
 
-
-
     useEffect(() => {
         fetchFileList();
     }, []);
 
+    const onSubmit = async (data: FormData) => {
+        localStorage.setItem('firstMessage', data.firstMessage);
+        toast({
+            title: "Success",
+            description: "Settings saved successfully.",
+            className: "bg-green-100 border-green-400 text-green-700"
+        });
+
+        // if (selectedFile) {
+        //     await handleSave(data.uploadTitle);
+        // }
+    };
 
     const handleSave = async () => {
-        setIsLoading(true);
-        if (!selectedFile) {
-            toast({
-                title: "Error",
-                description: "Please select a file to upload.",
-                variant: "destructive",
-            });
-            return;
-        }
-
         setIsUploading(true);
 
         const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('name', uploadTitle || selectedFile.name);
+        formData.append('file', selectedFile as File);
+        formData.append('name', (selectedFile as File).name);
 
         try {
             const response = await fetch('https://api.vapi.ai/file', {
@@ -121,10 +135,7 @@ const AdminPage = () => {
             // Reset form and close dialog
             setFileName(null);
             setSelectedFile(null);
-            setUploadTitle('');
-            // Close the dialog here if you have a state for it
-
-            // Refresh the file list
+            setIsDialogOpen(false); // Close the dialog
             fetchFileList();
         } catch (error) {
             console.error('Error uploading file:', error);
@@ -167,29 +178,18 @@ const AdminPage = () => {
         return date.toISOString().split('T')[0];
     }
 
-
-    const handleSaveSettings = () => {
-        // Save the first message to localStorage
-        localStorage.setItem('firstMessage', fileTitle);
-        toast({
-            title: "Success",
-            description: "Settings saved successfully.",
-            className: "bg-green-100 border-green-400 text-green-700"
-        });
-    };
-
     return (
         <div className="admin-form-container bg-admin p-6 ">
-            <div className="form-container p-4 rounded-3xl space-y-10">
+            <form onSubmit={handleSubmit(onSubmit)} className="form-container p-4 rounded-3xl space-y-10">
                 <div className="form-group mb-6">
-                    <label htmlFor="file-title" className="block mb-2">First Message</label>
+                    <label htmlFor="firstMessage" className="block mb-2">First Message</label>
                     <Textarea
-                        id="file-title"
+                        id="firstMessage"
                         placeholder="Hai, this is AI voice assistant, can I help you today?"
-                        value={fileTitle}
-                        onChange={(e) => setFileTitle(e.target.value)}
+                        {...register('firstMessage')}
                         className="w-full border-none bg-[#474747ce] h-32 max-h-96 placeholder-white"
                     />
+                    {errors.firstMessage && <p className="text-red-500">{errors.firstMessage.message}</p>}
                 </div>
 
                 <div className="form-group mb-6">
@@ -198,7 +198,7 @@ const AdminPage = () => {
                         Supported formats: PDF,DOCX
                     </p>
 
-                    <Dialog>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
                             <Button variant="outline" className="flex border-none items-center bg-green-600 hover:bg-green-700">
                                 <img src="svg/upload.svg" className="h-4 w-4 mr-2 text-white" color="white" />
@@ -217,9 +217,9 @@ const AdminPage = () => {
                                         type="text"
                                         placeholder="Enter title here"
                                         className="mb-4 bg-[#3a3a3a] border-none"
-                                        value={uploadTitle}
-                                        onChange={(e) => setUploadTitle(e.target.value)}
+                                        {...register('uploadTitle')}
                                     />
+                                    {errors.uploadTitle && <p className="text-red-500">{errors.uploadTitle.message}</p>}
                                 </div>
 
                                 {/* file upload */}
@@ -244,9 +244,10 @@ const AdminPage = () => {
                                     )}
                                 </div>
                                 <Button 
-                                    onClick={handleSave} 
+                                    type="submit" 
                                     className="mt-4 bg-green-600 hover:bg-green-700 w-full"
                                     disabled={isUploading}
+                                    onClick={() => handleSave()}
                                 >
                                     {isUploading ? (
                                         <>
@@ -261,10 +262,10 @@ const AdminPage = () => {
                     </Dialog>
                 </div>
 
-                <Button onClick={handleSaveSettings} className="bg-blue-500 w-full text-white hover:bg-blue-600">
+                <Button type="submit" className="bg-blue-500 w-full text-white hover:bg-blue-600">
                     Save Settings
                 </Button>
-            </div>
+            </form>
 
             <div className="">
                 <label className="block mb-2">List Document</label>
