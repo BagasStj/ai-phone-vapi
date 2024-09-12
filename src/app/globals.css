@@ -25,3 +25,543 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+/* globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Reset Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+html, body, #__next {
+  height: 100%;
+  width: 100%;
+}
+/* Styling Background */
+.bg-ai-phone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Mengatur jarak antar elemen */
+  min-height: 100vh;
+  padding: 0 80px; /* Tambahkan padding untuk memberi jarak pada sisi kiri dan kanan */
+  background: radial-gradient(circle at 69% center, #400040, #1a001a, #0d000d);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Elemen lingkaran beranimasi untuk efek visual */
+.bg-ai-phone::before {
+  content: "";
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(128, 0, 128, 0.5), transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite;
+}
+
+/* Animasi untuk efek pulsasi lingkaran */
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+
+/* Styling Form */
+.form-container {
+  z-index: 10;
+  max-width: 400px;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-150%);
+  transition: transform 0.3s ease;
+  
+}
+
+.form-group {
+  display: flex;
+  align-items: flex-start; /* Posisi elemen form */
+  justify-content: space-between; /* Jarak antara form dan tombol */
+}
+
+.form-content {
+  flex: 1; /* Agar form menempati ruang yang tersedia */
+}
+
+
+label {
+  color: white; /* Mengatur warna label menjadi putih */
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Styling Input dan Button */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: none;
+  margin-top: 8px; /* Jarak dari label ke input */
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+
+
+input + input {
+  margin-top: 16px; /* Atur jarak antar input */
+}
+
+/* button {
+  display: inline-block;
+  padding: 12px 24px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+} */
+
+/* button:hover {
+  background: #218838;
+} */
+
+.start-call-container {
+  display: flex;
+  align-items: flex-start; /* Menjaga tombol dan form pada posisi atas */
+  justify-content: space-between; /* Memisahkan form dan tombol */
+}
+
+.start-call-button {
+  margin-left: 290px; /* Jarak tombol dari form */
+}
+
+svg {
+  width: 80px; /* Ukuran standar atau sesuai kebutuhan */
+  height: 80px; /* Ukuran standar atau sesuai kebutuhan */
+  fill: currentColor; /* Menyesuaikan warna SVG dengan teks */
+}
+
+/* Styling untuk Tombol Panggilan */
+.call-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: absolute; /* Letakkan tombol secara absolut */
+  bottom: 20px; /* Jarak dari bawah kontainer */
+  left: 70%; /* Mulai dari tengah layar */
+  transform: translateX(-50%); /* Pusatkan horizontal */
+  transition: transform 0.3s ease;
+  z-index: 2; /* Pastikan tombol berada di atas lingkaran */
+}
+
+.call-button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.call-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Warna saat hover tetap sedikit transparan */
+}
+
+/* Contoh untuk spesifik pause-button dan call-end-button */
+.pause-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Transparan saat hover */
+}
+
+.call-end-button:hover {
+  background-color: rgba(255, 0, 0, 0.1); /* Transparan dengan sedikit warna merah saat hover */
+}
+
+/* Admin Page Background */
+.bg-admin {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% bottom, #600160, #1a001a, #0d000d);
+  overflow: hidden;
+  position: relative;
+}
+.admin-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background: radial-gradient(circle at 50% bottom, #ff69b4, #ff1493, #800080);
+  min-height: 100vh;
+  color: white;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+input[type="text"] {
+  width: 100%; /* Pastikan input mengambil lebar penuh */
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #555;
+  color: white;
+  margin-bottom: 16px;
+}
+
+
+button:hover {
+  background-color: #218838;
+}
+
+.table-container {
+  width: 50%;
+  height: 45%; 
+  padding: 20px;
+  border-radius: 8px;
+  left: 70%; /* Mulai dari tengah layar */
+  transform: translateX(100%); /* Pusatkan horizontal */
+}
+
+table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+table th,
+table td {
+  padding: 12px;
+  border: 1px solid white;
+  border-bottom: 1px solid white;
+  text-align: center;
+  color: white;
+  background: #FFFFFF21;
+}
+
+table th {
+  text-align: center;
+  color: white;
+  background-color: #AB04B1D9;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column; /* Susun elemen dalam kolom */
+  margin-bottom: 0.5rem;
+}
+
+.admin-form-container {
+  display: flex;
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  align-items: center;
+  height: 100vh; /*Memastikan kontainer memanjang penuh viewport*/
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% bottom, #600160, #1a001a, #0d000d);
+}
+
+/* Pastikan .form-container tidak terpengaruh oleh pengaturan ini */
+/* .admin-form-container .form-container {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+} */
+
+.hidden {
+  display: none;
+}
+
+.admin-upload-icon {
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: -4px;
+  width: 35px; /* Ukuran khusus SVG di halaman admin */
+  height: 20px; /* Ukuran khusus SVG di halaman admin */
+}
+
+.upload-btn {
+  margin-top: 10px;
+  left: 100px; /* Posisi dari kiri halaman */
+  cursor: pointer;
+  background-color: #4a334a; /* Warna tombol */
+  color: white; /* Warna teks dan ikon */
+  border: none; /* Menghilangkan border default */
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* home.css */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  background: radial-gradient(circle at 50% bottom, #600160, #1a001a, #0d000d); /* Warna sesuai halaman admin */
+  padding: 20px;
+}
+
+.home-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.home-description {
+  color: white;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2B243C;
+  opacity: 80%;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #6b239e;
+}
+
+.home-button img {
+  margin-right: 0.5rem;
+  width: 24px;
+  height: 24px;
+}
+
+/* home.css */
+.home-footer-image {
+  position: absolute;
+  bottom: 0px; /* Atur jarak dari bawah */
+  left: 50%;
+  transform: translateX(-45%); /* Pusatkan gambar secara horizontal */
+  width: 1300px; /* Atur ukuran gambar sesuai kebutuhan */
+  height: auto; /* Menjaga rasio aspek gambar */
+}
+
+/* Modal Overlay */
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 50; /* Pastikan ini lebih tinggi dari konten lainnya */
+}
+
+/* Modal Content */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Ensure modal is on top */
+}
+
+.modal-content {
+  background-color: #3C3C3C;
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%; /* Sesuaikan lebar modal */
+  height: 70vh; /* Mengatur tinggi modal menjadi 70% dari tinggi viewport */
+  max-height: 60vh; /* Batasi tinggi maksimal modal */
+  overflow-y: auto; /* Tambahkan scrollbar jika konten melebihi tinggi modal */
+  position: relative;
+  z-index: 1001;
+  padding-top: 100px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title, .modal-description {
+  color: #fff;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: -30px;
+  right: 10px;
+  padding-top: 50px;
+}
+
+.modal-file-upload {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #555;
+}
+
+.modal-file-upload.dragging {
+  background-color: #444;
+}
+
+.modal-upload-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.modal-upload-button:hover {
+  background-color: #0056b3;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-save {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  align-self: center;
+}
+
+.modal-save:hover {
+  background-color: #0056b3;
+}
+
