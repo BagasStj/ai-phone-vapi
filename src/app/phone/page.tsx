@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Toaster } from "@/components/ui/toaster";
 
 const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 
@@ -20,22 +21,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const AiPhone = () => {
-  const { toast } = useToast();
-  const [isCallActive, setIsCallActive] = useState(false);
-  const [callStatus, setCallStatus] = useState('');
-  const [activeCall, setActiveCall] = useState<any>(null);
-  const [vapiClient, setVapiClient] = useState<VapiClient | null>(null as any);
-  const [defaultCall, setDefaultCall] = useState<any>({
-    firstMessage: "HALLO , Adakah yang bisa saya bantu ?",
-    model: {
-      provider: "openai",
-      model: "gpt-3.5-turbo",
-      temperature: 0.5,
-      messages: [
-        {
-          role: "assistant",
-          content: `You is a specialized AI assistant designed for customer support in the field of BPJS and insurance. With deep expertise in BPJS systems, policies, and insurance processes, you serve as a valuable resource for answering inquiries related to healthcare coverage, claims, and administrative tasks. Integrated with a dynamic database, you can read, interpret, and respond to input data—whether it's a single piece of information or multiple datasets—providing accurate and contextually relevant answers in real-time.
+const initialprompt = `You is a specialized AI assistant designed for customer support in the field of BPJS and insurance. With deep expertise in BPJS systems, policies, and insurance processes, you serve as a valuable resource for answering inquiries related to healthcare coverage, claims, and administrative tasks. Integrated with a dynamic database, you can read, interpret, and respond to input data—whether it's a single piece of information or multiple datasets—providing accurate and contextually relevant answers in real-time.
 
                     Major Mode of Interaction: You operates primarily through audio, providing support specifically related to BPJS and insurance by interpreting the data you input. You can handle both simple and complex datasets, delivering tailored, data-driven responses for users based on real-time information in the integrated database.
 
@@ -52,16 +38,41 @@ const AiPhone = () => {
                     - If the number 1 is present, you should read it as "satu."
                     - If the number 0 is present, you should read it as "nol".
 
-                    You's mission is to streamline BPJS and insurance-related customer support by leveraging input data to provide accurate, timely, and empathetic responses. Whether dealing with a single data point or multiple datasets, you ensures that agents and users receive the highest level of service by focusing solely on BPJS and insurance information.`,//system prompt
+                    You's mission is to streamline BPJS and insurance-related customer support by leveraging input data to provide accurate, timely, and empathetic responses. Whether dealing with a single data point or multiple datasets, you ensures that agents and users receive the highest level of service by focusing solely on BPJS and insurance information.
+                    
+                    You have data  Name is "john doe" and  NIK "1001" and my number phone is "1001" and have data about BPJS and insurance takaful
+                    `
+
+const AiPhone = () => {
+  const { toast } = useToast();
+  const [isCallActive, setIsCallActive] = useState(false);
+  const [callStatus, setCallStatus] = useState('');
+  const [activeCall, setActiveCall] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(null);
+  const [promptTambahan , setPromptTambahan] = useState('')
+  const [isUserValid, setIsUserValid] = useState<boolean>(false);
+  const [vapiClient, setVapiClient] = useState<VapiClient | null>(null as any);
+  const [defaultCall, setDefaultCall] = useState<any>({
+    firstMessage: "HALLO , Adakah yang bisa saya bantu ?",
+    model: {
+      provider: "openai",
+      model: "gpt-3.5-turbo",
+      temperature: 0.5,
+      messages: [
+        {
+          role: "assistant",
+          content: initialprompt
         },
       ],
       maxTokens: 5,
     },
     voice: {
       provider: "11labs",
-      voiceId: "OKanSStS6li6xyU1WdXa",
+      voiceId: "IMaRqUzeNVCT6ks9SI4Y",
     },
   });
+
+  const [fileIds, setFileIds] = useState<string[]>([]);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -80,9 +91,17 @@ const AiPhone = () => {
         firstMessage: savedFirstMessage
       }));
     }
+
+    // Retrieve fileIds from localStorage
+    const savedFileId = localStorage.getItem('idFileVapi');
+    if (savedFileId) {
+      // Ensure fileIds is always an array
+      setFileIds([savedFileId]);
+    }
+
   }, []);
 
-  const startCall = useCallback(async (data: FormData) => {
+  const startCall = useCallback(async (prompt:string) => {
     try {
       if (!vapiClient) {
         console.log("Client is not initial");
@@ -90,15 +109,15 @@ const AiPhone = () => {
           title: "Error",
           description: "Vapi client is not initialized.",
           duration: 3000,
-          variant: "destructive",
+          variant: "destructive"
         });
         return;
       }
-      console.log("start call", data);
+      console.log("start call");
 
       setIsCallActive(true);
       setCallStatus('Calling...');
-      toast({ title: "Calling Start", description: "Please wait a moment", className: "bg-green-100 border-green-400 text-green-700" });
+      toast({ title: "Calling Start", description: "Please wait a moment", className: "bg-green-100 border-green-400 text-green-700",     duration: 3000, });
       console.log('GET PARAMS', defaultCall);
 
       const call = await vapiClient.start({
@@ -121,9 +140,7 @@ const AiPhone = () => {
           knowledgeBase: {
             provider: "canonical",
             topK: 10,
-            fileIds: [
-              "1b52e29b-6f48-48b5-9b37-f9ca350e677a"
-            ]
+            fileIds: ["bc5e0f55-6dfe-4cae-9eb4-8ca39fd2f953"]
           }
         },
         "voice": {
@@ -135,11 +152,12 @@ const AiPhone = () => {
       setActiveCall(call);
 
       vapiClient.on('call-start', () => {
-        toast({ title: "Call Status", description: "Ringing...", className: "bg-green-100 border-green-400 text-green-700" });
+     
+          toast({ title: "Call Status", description: "Ringing...", className: "bg-green-100 border-green-400 text-green-700" ,     duration: 3000 });
       });
-      vapiClient.on('speech-start', () => toast({ title: "Call Status", description: "Connected", className: "bg-green-100 border-green-400 text-green-700" }));
+      vapiClient.on('speech-start', () => toast({ title: "Call Status", description: "Connected", className: "bg-green-100 border-green-400 text-green-700" ,      duration: 3000}));
       vapiClient.on('call-end', () => {
-        toast({ title: "Call Status", description: "Call ended", className: "bg-red-100 border-red-400 text-red-700" });
+        toast({ title: "Call Status", description: "Call ended", className: "bg-red-100 border-red-400 text-red-700"  ,    duration: 3000,});
         setIsCallActive(false);
       });
 
@@ -153,7 +171,7 @@ const AiPhone = () => {
       });
       setIsCallActive(false);
     }
-  }, [vapiClient, defaultCall]);
+  }, [vapiClient, defaultCall, fileIds]);
 
   const endCall = useCallback(() => {
     if (vapiClient) {
@@ -164,12 +182,78 @@ const AiPhone = () => {
     setCallStatus('Call ended');
   }, [vapiClient, activeCall]);
 
-  const onSubmit = (data: FormData) => {
-    startCall(data);
+  const onSubmit = async (data: FormData) => {
+    setIsUserValid(false);
+    try {
+      const response = await fetch('/api/check-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nik: data.nik, name: data.name }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+
+      if (result.isValid) {
+        toast({
+          title: "User Verified",
+          description: "User data found in the database.",
+          duration: 3000,
+          className: "bg-green-100 border-green-400 text-green-700"
+        });
+        setIsUserValid(true);
+        setUserData(result.data);
+        
+        // Add user data to defaultCall content
+        // setDefaultCall((prevState: any) => ({
+        //   ...prevState,
+        //   model: {
+        //     ...prevState.model,
+        //     messages: [
+        //       {
+        //         ...prevState.model.messages[0],
+        //         content: `${prevState.model.messages[0].content} \n you have data which Name is ${result.data.namalengkap} and  NIK ${result.data.nik} and my number phone is ${result.data.nomorhp}`              }
+        //     ]
+        //   }
+        // }));
+
+        
+        // const promptTambahan = `
+        // ${initialprompt} \n you have data which Name is ${result.data.namalengkap} and  NIK ${result.data.nik} and my number phone is ${result.data.nomorhp}
+        // `
+        
+        setTimeout(() => {
+          startCall(promptTambahan);
+        }, 1000);
+      } else {
+        toast({
+          title: "User Not Found",
+          description: "User data not found in the database.",
+          duration: 3000,
+          variant: "destructive",
+        });
+        setIsUserValid(false);
+      }
+    } catch (error) {
+      console.error('Error checking user:', error);
+      toast({
+        title: "Error",
+        description: "Failed to check user data.",
+        duration: 3000,
+        variant: "destructive",
+      });
+      setIsUserValid(false);
+    }
   };
 
   return (
     <div className="bg-ai-phone p-6 relative">
+      <Toaster />
       <Link href="/" passHref>
         <Button
           className="absolute top-4 left-4 bg-[#2B243C] hover:bg-[#6b239e] text-white"
@@ -209,13 +293,20 @@ const AiPhone = () => {
           />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
+        <Button
+          type="submit"
+          className="mt-4 bg-green-600 hover:bg-green-700 w-full"
+          
+        >
+          Check Data and Call 
+        </Button>
       </form>
 
       <div className="fixed bottom-8 right-72 transform -translate-x-1/2 flex space-x-10">
         <button
-          className={`w-16 h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-16 h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive || !isUserValid ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={handleSubmit(onSubmit)}
-          disabled={isCallActive}
+          disabled={isCallActive || !isUserValid}
         >
           <img src="svg/phone.svg" className="h-4 w-4  text-white" color="white" />
         </button>

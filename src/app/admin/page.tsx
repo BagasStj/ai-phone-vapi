@@ -35,6 +35,7 @@ const AdminPage = () => {
     const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [firstMessage, setFirstMessage] = useState('');
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -80,6 +81,7 @@ const AdminPage = () => {
 
             const data = await response.json();
             setFileList(data); // Assuming the API returns an array of file objects
+            localStorage.setItem('idFileVapi', data[0].id);
         } catch (error) {
             console.error('Error fetching file list:', error);
             // Optionally, you can set a default list or show an error message
@@ -90,8 +92,8 @@ const AdminPage = () => {
         fetchFileList();
     }, []);
 
-    const onSubmit = async (data: FormData) => {
-        localStorage.setItem('firstMessage', data.firstMessage);
+    const onSubmit = async (data: any) => {
+        localStorage.setItem('firstMessage', data);
         toast({
             title: "Success",
             description: "Settings saved successfully.",
@@ -181,7 +183,7 @@ const AdminPage = () => {
     return (
         <div className="admin-form-container bg-admin p-6 ">
             <form onSubmit={handleSubmit(onSubmit)} className="form-container p-4 rounded-3xl space-y-10">
-                <div className="form-group mb-6">
+                {/* <div className="form-group mb-6">
                     <label htmlFor="firstMessage" className="block mb-2">First Message</label>
                     <Textarea
                         id="firstMessage"
@@ -190,7 +192,7 @@ const AdminPage = () => {
                         className="w-full border-none bg-[#474747ce] h-32 max-h-96 placeholder-white"
                     />
                     {errors.firstMessage && <p className="text-red-500">{errors.firstMessage.message}</p>}
-                </div>
+                </div> */}
 
                 <div className="form-group mb-6">
                     <label htmlFor="upload-file" className="block mb-2">Upload File</label>
@@ -218,6 +220,7 @@ const AdminPage = () => {
                                         placeholder="Enter title here"
                                         className="mb-4 bg-[#3a3a3a] border-none"
                                         {...register('uploadTitle')}
+                                        onChange={(e) => setFirstMessage(e.target.value)}
                                     />
                                     {errors.uploadTitle && <p className="text-red-500">{errors.uploadTitle.message}</p>}
                                 </div>
@@ -243,8 +246,8 @@ const AdminPage = () => {
                                         <p className="text-sm text-gray-300 mt-2">Selected: {fileName}</p>
                                     )}
                                 </div>
-                                <Button 
-                                    type="submit" 
+                                <Button
+                                    type="submit"
                                     className="mt-4 bg-green-600 hover:bg-green-700 w-full"
                                     disabled={isUploading}
                                     onClick={() => handleSave()}
@@ -262,7 +265,7 @@ const AdminPage = () => {
                     </Dialog>
                 </div>
 
-                <Button type="submit" className="bg-blue-500 w-full text-white hover:bg-blue-600">
+                <Button type="submit" className="bg-blue-500 w-full text-white hover:bg-blue-600" onClick={() => onSubmit(firstMessage)}>
                     Save Settings
                 </Button>
             </form>
