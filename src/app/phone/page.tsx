@@ -68,7 +68,7 @@ const AiPhone = () => {
     },
     voice: {
       provider: "11labs",
-      voiceId: "IMaRqUzeNVCT6ks9SI4Y",
+      voiceId: "3mAVBNEqop5UbHtD8oxQ",
     },
   });
 
@@ -140,12 +140,15 @@ const AiPhone = () => {
           knowledgeBase: {
             provider: "canonical",
             topK: 10,
-            fileIds: ["bc5e0f55-6dfe-4cae-9eb4-8ca39fd2f953"]
+            fileIds: fileIds.length > 0 ? fileIds : ["1b52e29b-6f48-48b5-9b37-f9ca350e677a"]
           }
         },
         "voice": {
           "provider": "11labs",
-          "voiceId": defaultCall.voice.voiceId
+          "voiceId": defaultCall.voice.voiceId,
+          similarityBoost:1,
+          model:"eleven_turbo_v2_5",
+          stability:1
         },
         "endCallMessage": "terimakasih, sampai jumpa"
       });
@@ -157,7 +160,7 @@ const AiPhone = () => {
       });
       vapiClient.on('speech-start', () => toast({ title: "Call Status", description: "Connected", className: "bg-green-100 border-green-400 text-green-700" ,      duration: 3000}));
       vapiClient.on('call-end', () => {
-        toast({ title: "Call Status", description: "Call ended", className: "bg-red-100 border-red-400 text-red-700"  ,    duration: 3000,});
+        toast({ title: "Call Status", description: "Call ended", className: "bg-red-100 border-red-400 text-red-700"  ,    duration: 1000});
         setIsCallActive(false);
       });
 

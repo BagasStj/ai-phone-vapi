@@ -1,27 +1,23 @@
 import { NextResponse } from 'next/server';
-import { Client } from 'pg';
+import { Pool } from 'pg';
 
 const DB_URL = process.env.NEXT_PUBLIC_DB_URL;
 
+const client = new Pool({
+  connectionString: DB_URL,
+});
+
 export async function POST(request: Request) {
   const { nik, name } = await request.json();
-  
-  const client = new Client({
-    connectionString: DB_URL,
-  });
 
   try {
-    await client.connect();
     const result = await client.query(
-      'SELECT * FROM public."pengguna_new" p  WHERE nik = $1 AND namalengkap  = $2',
+      'SELECT * FROM public."pengguna_new" p  WHERE nik = $1 or namalengkap  = $2',
       [nik, name]
     );
+    await client.end()
+    console.log('[result 2]', result.rows[0]);
 
-    console.log('[result]', result);
-
-    await client.end();
-
- 
     if (result.rows.length > 0) {
       return NextResponse.json({ isValid: true  , data: result.rows[0]});
     } else {
@@ -29,6 +25,6 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error('Error checking database:', error);
-    return NextResponse.json({ error: 'Database error' , message: error }, { status: 500 });
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
