@@ -15,7 +15,6 @@ export async function POST(request: Request) {
       'SELECT * FROM public."pengguna_new" p  WHERE nik = $1 or namalengkap  = $2',
       [nik, name]
     );
-    await client.end()
     console.log('[result 2]', result.rows[0]);
 
     if (result.rows.length > 0) {
