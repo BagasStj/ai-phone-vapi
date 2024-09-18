@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   try {
     const result = await client.query(
-      'SELECT * FROM public."pengguna_new" p  WHERE nik = $1 or namalengkap  = $2',
+      'SELECT * FROM public."pengguna_new" p  WHERE nik = $1 and lower(namalengkap)  = lower($2)',
       [nik, name]
     );
     console.log('[result 2]', result.rows[0]);
