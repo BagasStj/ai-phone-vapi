@@ -160,7 +160,8 @@ html, body, #__next {
   width: 100%;
   position: absolute;
   left: 50%;
-  transform: translateX(-150%);
+  top: 25%;
+  transform: translate(-50%, -50%);
   transition: transform 0.3s ease;
   
 }
@@ -408,20 +409,23 @@ table th {
   text-align: center;
   background: radial-gradient(circle at 50% bottom, #600160, #1a001a, #0d000d); /* Warna sesuai halaman admin */
   padding: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
 .home-title {
   color: white;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  max-width: 90%;
 }
 
 .home-description {
   color: white;
-  font-size: 1.125rem;
+  font-size: 1rem;
   margin-bottom: 2rem;
-  max-width: 500px;
+  max-width: 90%;
 }
 
 .home-button {
@@ -436,6 +440,7 @@ table th {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  z-index: 10;
 }
 
 .home-button:hover {
@@ -444,18 +449,51 @@ table th {
 
 .home-button img {
   margin-right: 0.5rem;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
-/* home.css */
 .home-footer-image {
   position: absolute;
-  bottom: 0px; /* Atur jarak dari bawah */
+  bottom: 0;
   left: 50%;
-  transform: translateX(-45%); /* Pusatkan gambar secara horizontal */
-  width: 1300px; /* Atur ukuran gambar sesuai kebutuhan */
-  height: auto; /* Menjaga rasio aspek gambar */
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1300px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .home-title {
+    font-size: 2.5rem;
+  }
+
+  .home-description {
+    font-size: 1.125rem;
+  }
+
+  .home-button {
+    font-size: 1.125rem;
+  }
+
+  .home-button img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 639px) {
+  .home-container {
+    padding: 10px;
+  }
+
+  .home-footer-image {
+    width: 150%;
+    max-width: none;
+    transform: translateX(-33%);
+  }
 }
 
 /* Modal Overlay */
@@ -563,5 +601,68 @@ table th {
 
 .modal-save:hover {
   background-color: #0056b3;
+}
+
+@media (max-width: 640px) {
+  .bg-ai-phone {
+    padding: 1rem;
+    justify-content: flex-start; /* Mengubah dari center ke flex-start */
+    padding-top: 4rem; /* Menambahkan padding atas */
+  }
+
+  .form-container {
+    transform: none;
+    left: 2px;
+    width: 100%;
+    margin-top: 2rem; /* Menambahkan margin atas pada form */
+  }
+
+  /* Tambahkan styling khusus untuk tombol panggilan pada mobile */
+  .fixed.bottom-8.right-72 {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Kembalikan styling desktop */
+@media (min-width: 641px) {
+  .bg-ai-phone {
+    justify-content: space-between;
+    padding: 0 80px;
+  }
+
+  .form-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-150%);
+  }
+}
+
+/* Add these styles at the end of the file */
+
+@media (max-width: 640px) {
+  .admin-form-container {
+    padding: 1rem;
+    align-items: flex-start;
+  }
+
+  .form-container {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+  .modal-content {
+    width: 90%;
+    height: 80vh;
+    padding-top: 50px;
+  }
+
+  .table-container {
+    width: 100%;
+    transform: none;
+    left: auto;
+  }
 }
 

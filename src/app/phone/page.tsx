@@ -255,11 +255,11 @@ const AiPhone = () => {
   };
 
   return (
-    <div className="bg-ai-phone p-6 relative">
+    <div className="bg-ai-phone p-6 relative min-h-screen flex flex-col justify-center items-center">
       <Toaster />
       <Link href="/" passHref>
         <Button
-          className="absolute top-4 left-4 bg-[#2B243C] hover:bg-[#6b239e] text-white"
+          className="absolute top-4 left-4 bg-[#2B243C] hover:bg-[#6b239e] text-white sm:text-sm"
           size="sm"
         >
           <img src="svg/house.svg" className="h-4 w-4 mr-2 text-white" color="white" />
@@ -267,9 +267,9 @@ const AiPhone = () => {
         </Button>
       </Link>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="form-container flex flex-col space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="form-container flex flex-col space-y-6 w-full max-w-md px-4 sm:px-0 mt-20 sm:mt-0">
         <div className="space-y-4">
-          <Label htmlFor="nik" className="text-white">
+          <Label htmlFor="nik" className="text-white text-sm sm:text-base">
             NIK
           </Label>
           <Input
@@ -277,13 +277,13 @@ const AiPhone = () => {
             id="nik"
             placeholder="Input NIK..."
             {...register('nik')}
+            className="bg-[#2a2a2ad4] placeholder-white h-11 text-sm sm:text-base"
             style={{ borderRadius: "12px" }}
-            className="bg-[#2a2a2ad4] placeholder-white h-11"
           />
-          {errors.nik && <p className="text-red-500">{errors.nik.message}</p>}
+          {errors.nik && <p className="text-red-500 text-xs sm:text-sm">{errors.nik.message}</p>}
         </div>
         <div className="space-y-4">
-          <Label htmlFor="name" className="text-white">
+          <Label htmlFor="name" className="text-white text-sm sm:text-base">
             Nama Lengkap
           </Label>
           <Input
@@ -291,30 +291,29 @@ const AiPhone = () => {
             id="name"
             placeholder="Input Nama Lengkap..."
             {...register('name')}
+            className="bg-[#2a2a2ad4] placeholder-white h-11 text-sm sm:text-base"
             style={{ borderRadius: "12px" }}
-            className="bg-[#2a2a2ad4] placeholder-white h-11"
           />
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="text-red-500 text-xs sm:text-sm">{errors.name.message}</p>}
         </div>
         <Button
           type="submit"
-          className="mt-4 bg-green-600 hover:bg-green-700 w-full"
-          
+          className="mt-4 bg-green-600 hover:bg-green-700 w-full text-sm sm:text-base"
         >
           Check Data and Call 
         </Button>
       </form>
 
-      <div className="fixed bottom-8 right-72 transform -translate-x-1/2 flex space-x-10">
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-10 sm:right-96 sm:left-auto sm:transform-none">
         <button
-          className={`w-16 h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive || !isUserValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-14 h-14 sm:w-16 sm:h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive || !isUserValid ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={handleSubmit(onSubmit)}
           disabled={isCallActive || !isUserValid}
         >
-          <img src="svg/phone.svg" className="h-4 w-4  text-white" color="white" />
+          <img src="svg/phone.svg" className="h-4 w-4 text-white" color="white" />
         </button>
         <button
-          className={`w-16 h-16 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 ${isCallActive ? '' : 'opacity-50 cursor-not-allowed'}`}
+          className={`w-14 h-14 sm:w-16 sm:h-16 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 ${isCallActive ? '' : 'opacity-50 cursor-not-allowed'}`}
           onClick={() => {
             endCall();
           }}

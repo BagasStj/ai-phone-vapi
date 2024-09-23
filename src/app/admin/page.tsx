@@ -181,33 +181,22 @@ const AdminPage = () => {
     }
 
     return (
-        <div className="admin-form-container bg-admin p-6 ">
-            <form onSubmit={handleSubmit(onSubmit)} className="form-container p-4 rounded-3xl space-y-10">
-                {/* <div className="form-group mb-6">
-                    <label htmlFor="firstMessage" className="block mb-2">First Message</label>
-                    <Textarea
-                        id="firstMessage"
-                        placeholder="Hai, this is AI voice assistant, can I help you today?"
-                        {...register('firstMessage')}
-                        className="w-full border-none bg-[#474747ce] h-32 max-h-96 placeholder-white"
-                    />
-                    {errors.firstMessage && <p className="text-red-500">{errors.firstMessage.message}</p>}
-                </div> */}
-
+        <div className="admin-form-container bg-admin p-6 sm:p-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="form-container p-4  rounded-3xl space-y-10 w-full max-w-md mx-auto">
                 <div className="form-group mb-6">
-                    <label htmlFor="upload-file" className="block mb-2">Upload File</label>
+                    <label htmlFor="upload-file" className="block mb-2 text-sm sm:text-base">Upload File</label>
                     <p className="text-xs text-gray-400 mb-2">
                         Supported formats: PDF,DOCX
                     </p>
 
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button variant="outline" className="flex border-none items-center bg-green-600 hover:bg-green-700">
+                            <Button variant="outline" className="flex border-none items-center bg-green-600 hover:bg-green-700 w-full sm:w-auto">
                                 <img src="svg/upload.svg" className="h-4 w-4 mr-2 text-white" color="white" />
-                                <span className="text-white">Add File</span>
+                                <span className="text-white text-sm sm:text-base">Add File</span>
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-[#1b1b1bde] border-none">
+                        <DialogContent className="bg-[#1b1b1bde] border-none w-11/12 sm:w-full max-w-md mx-auto">
                             <DialogHeader>
                                 <DialogTitle>Upload File</DialogTitle>
                             </DialogHeader>
@@ -265,34 +254,34 @@ const AdminPage = () => {
                     </Dialog>
                 </div>
 
-                <Button type="submit" className="bg-blue-500 w-full text-white hover:bg-blue-600" onClick={() => onSubmit(firstMessage)}>
+                <Button type="submit" className="bg-blue-500 w-full text-white hover:bg-blue-600 text-sm sm:text-base" onClick={() => onSubmit(firstMessage)}>
                     Save Settings
                 </Button>
             </form>
 
-            <div className="">
-                <label className="block mb-2">List Document</label>
-                <table className="w-[37vw] border-collapse border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th className="border border-gray-300 p-2">No.</th>
-                            <th className="border border-gray-300 p-2">File Name</th>
-                            <th className="border border-gray-300 p-2 ">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fileList.map((file: any, index) => (
-                            <tr key={index}>
-                                <td className="border border-gray-300 p-2">{index + 1}</td>
-                                <td className="border border-gray-300 p-2">{file.name}</td>
-                                <td className="border border-gray-300 p-2">{formatDate(file.createdAt)}</td>
+            <div className="mt-8 w-full max-w-md mx-auto md:right-[6%] md:absolute">
+                <label className="block mb-2 text-sm sm:text-base">List Document</label>
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300 text-sm sm:text-base">
+                        <thead>
+                            <tr>
+                                <th className="border border-gray-300 p-2">No.</th>
+                                <th className="border border-gray-300 p-2">File Name</th>
+                                <th className="border border-gray-300 p-2 ">Date</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {fileList.map((file: any, index) => (
+                                <tr key={index}>
+                                    <td className="border border-gray-300 p-2">{index + 1}</td>
+                                    <td className="border border-gray-300 p-2">{file.name}</td>
+                                    <td className="border border-gray-300 p-2">{formatDate(file.createdAt)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-
         </div>
     );
 };
