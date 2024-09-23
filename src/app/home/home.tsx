@@ -12,7 +12,7 @@ export default function Home() {
       <Link href="/phone" className="z-10">
         <button className="home-button flex items-center justify-center px-6 py-3 text-base sm:text-lg font-medium rounded-full transition duration-300 ease-in-out transform hover:scale-105">
           <img src="/phone.svg" alt="Phone Icon" className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
-          Let's try Call Voice
+          Let&apos;s try Call Voice
         </button>
       </Link>
       <img 
