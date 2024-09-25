@@ -50,7 +50,7 @@ const AiPhone = () => {
   const [activeCall, setActiveCall] = useState<any>(null);
   const [userData, setUserData] = useState<any>(null);
   const [promptTambahan , setPromptTambahan] = useState('')
-  const [isUserValid, setIsUserValid] = useState<boolean>(false);
+  const [isUserValid, setIsUserValid] = useState<boolean>(true); // Changed to true by default
   const [vapiClient, setVapiClient] = useState<VapiClient | null>(null as any);
   const [defaultCall, setDefaultCall] = useState<any>({
     firstMessage: "HALLO , Adakah yang bisa saya bantu ?",
@@ -74,9 +74,12 @@ const AiPhone = () => {
 
   const [fileIds, setFileIds] = useState<string[]>([]);
 
+  // Commented out form-related code
+  /*
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
+  */
 
   useEffect(() => {
     if (VAPI_PUBLIC_KEY) {
@@ -185,6 +188,8 @@ const AiPhone = () => {
     setCallStatus('Call ended');
   }, [vapiClient, activeCall]);
 
+  // Commented out onSubmit function
+  /*
   const onSubmit = async (data: FormData) => {
     setIsUserValid(false);
     try {
@@ -253,6 +258,7 @@ const AiPhone = () => {
       setIsUserValid(false);
     }
   };
+  */
 
   return (
     <div className="bg-ai-phone p-6 relative min-h-screen flex flex-col justify-center items-center">
@@ -267,6 +273,8 @@ const AiPhone = () => {
         </Button>
       </Link>
 
+      {/* Commented out form */}
+      {/*
       <form onSubmit={handleSubmit(onSubmit)} className="form-container flex flex-col space-y-6 w-full max-w-md px-4 sm:px-0 mt-20 sm:mt-0">
         <div className="space-y-4">
           <Label htmlFor="nik" className="text-white text-sm sm:text-base">
@@ -303,12 +311,13 @@ const AiPhone = () => {
           Check Data and Call 
         </Button>
       </form>
+      */}
 
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-10 sm:right-96 sm:left-auto sm:transform-none">
         <button
-          className={`w-14 h-14 sm:w-16 sm:h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive || !isUserValid ? 'opacity-50 cursor-not-allowed' : ''}`}
-          onClick={handleSubmit(onSubmit)}
-          disabled={isCallActive || !isUserValid}
+          className={`w-14 h-14 sm:w-16 sm:h-16 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 ${isCallActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => startCall(promptTambahan)}
+          disabled={isCallActive}
         >
           <img src="svg/phone.svg" className="h-4 w-4 text-white" color="white" />
         </button>
